@@ -24,10 +24,6 @@ export function ScenePlaceholder({ scene, index }: { scene: SceneDefinition; ind
     <div className="relative flex h-full flex-col justify-end bg-ns-black px-[var(--hud-pad)] pb-[calc(var(--hud-h)+var(--hud-pad)*2)] pt-[var(--hud-pad)]">
       <div className="ns-grid pointer-events-none absolute inset-0" aria-hidden />
 
-      <p className="ns-label absolute left-[var(--hud-pad)] top-[var(--hud-pad)] text-ns-gray">
-        NIGHT//SHIFT <span className="text-accent">/ foundation build</span>
-      </p>
-
       <p className="ns-label relative mb-4 text-accent">
         Act {scene.act} — {scene.district}
       </p>

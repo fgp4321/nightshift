@@ -12,6 +12,8 @@ interface ExperienceState {
   currentScene: SceneId;
   introComplete: boolean;
   audioEnabled: boolean;
+  /** 0–1 master volume for the ambience. */
+  volume: number;
   isTransitioning: boolean;
   menuOpen: boolean;
   capabilities: DeviceCapabilities;
@@ -23,6 +25,7 @@ interface ExperienceState {
   resetIntro: () => void;
   hydrateIntro: () => void;
   setAudioEnabled: (enabled: boolean) => void;
+  setVolume: (volume: number) => void;
   setTransitioning: (value: boolean) => void;
   setMenuOpen: (open: boolean) => void;
   setCapabilities: (capabilities: DeviceCapabilities) => void;
@@ -41,6 +44,7 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   currentScene: "city",
   introComplete: false,
   audioEnabled: false,
+  volume: 0.6,
   isTransitioning: false,
   menuOpen: false,
   capabilities: SERVER_CAPABILITIES,
@@ -65,6 +69,7 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
     }
   },
   setAudioEnabled: (audioEnabled) => set({ audioEnabled }),
+  setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)) }),
   setTransitioning: (isTransitioning) => set({ isTransitioning }),
   setMenuOpen: (menuOpen) => set({ menuOpen }),
   setCapabilities: (capabilities) =>

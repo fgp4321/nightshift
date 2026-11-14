@@ -77,3 +77,119 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ───────────────────────── Phase 2 — interface layer ───────────────────────── */
+
+/* HUD stays hidden until the boot sequence hands over. */
+.ns-hud { transition: opacity var(--dur-slow) var(--ease-cine) 200ms; }
+[data-intro="pending"] .ns-hud { opacity: 0; }
+
+/* Accent corner tick on HUD buttons. */
+.ns-tick::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+
+/* One-shot RGB split. */
+.ns-glitch { position: relative; display: inline-block; }
+.ns-glitch::before,
+.ns-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.ns-glitch::before { color: var(--color-ns-cyan); }
+.ns-glitch::after { color: var(--color-ns-magenta); }
+:is(a, button):is(:hover, :focus-visible) .ns-glitch::before,
+.ns-glitch[data-active]::before { animation: ns-glitch-a 420ms steps(1) 1; }
+:is(a, button):is(:hover, :focus-visible) .ns-glitch::after,
+.ns-glitch[data-active]::after { animation: ns-glitch-b 420ms steps(1) 1; }
+
+@keyframes ns-glitch-a {
+  0% { opacity: 0.9; transform: translate(-0.04em, 0); clip-path: inset(8% 0 62% 0); }
+  33% { opacity: 0.9; transform: translate(0.05em, 0); clip-path: inset(55% 0 12% 0); }
+  66% { opacity: 0.9; transform: translate(-0.02em, 0); clip-path: inset(30% 0 40% 0); }
+  100% { opacity: 0; }
+}
+@keyframes ns-glitch-b {
+  0% { opacity: 0.9; transform: translate(0.04em, 0); clip-path: inset(60% 0 10% 0); }
+  33% { opacity: 0.9; transform: translate(-0.05em, 0); clip-path: inset(12% 0 70% 0); }
+  66% { opacity: 0.9; transform: translate(0.03em, 0); clip-path: inset(42% 0 28% 0); }
+  100% { opacity: 0; }
+}
+
+/* Screen texture */
+.ns-scanlines {
+  background: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.028) 0 1px, transparent 1px 3px);
+}
+.ns-grain {
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ns-vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / 0.55) 100%);
+}
+
+/* Sound toggle equaliser */
+.ns-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.ns-eq i { width: 2px; height: 3px; background: currentColor; transform-origin: bottom; }
+.ns-eq[data-on] i { height: 12px; animation: ns-eq 900ms ease-in-out infinite alternate; }
+.ns-eq[data-on] i:nth-child(2) { animation-delay: -300ms; }
+.ns-eq[data-on] i:nth-child(3) { animation-delay: -620ms; }
+.ns-eq[data-on] i:nth-child(4) { animation-delay: -150ms; }
+@keyframes ns-eq { from { transform: scaleY(0.25); } to { transform: scaleY(1); } }
+
+/* Custom cursor */
+html.ns-cursor-on, html.ns-cursor-on * { cursor: none !important; }
+.ns-cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--accent);
+}
+.ns-cursor-ring {
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+}
+.ns-cursor-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--accent);
+  opacity: 0.55;
+  transition: transform var(--dur-base) var(--ease-cine), opacity var(--dur-base), background-color var(--dur-base);
+}
+.ns-cursor-ring[data-hover="true"]::before {
+  transform: scale(1.7) rotate(45deg);
+  opacity: 1;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.ns-cursor-ring[data-down="true"]::before { transform: scale(0.7); }
+.ns-cursor-label {
+  position: absolute;
+  left: 44px;
+  top: 50%;
+  translate: 0 -50%;
+  white-space: nowrap;
+  color: var(--accent);
+}
+
+/* Boot sequence */
+.ns-boot-seg { transform: scaleX(0); transform-origin: left; }
+[data-interference="true"] [data-boot-content] { animation: ns-interference 300ms steps(1) 1; }
+@keyframes ns-interference {
+  0% { transform: translate(-1.2%, 0) skewX(-6deg); filter: hue-rotate(40deg) brightness(1.6); clip-path: inset(0 0 58% 0); }
+  25% { transform: translate(1.6%, 0.4%); clip-path: inset(34% 0 22% 0); }
+  50% { transform: translate(-0.6%, 0) skewX(4deg); filter: brightness(2); clip-path: inset(62% 0 0 0); }
+  75% { transform: translate(0.8%, -0.3%); clip-path: inset(12% 0 40% 0); }
+  100% { transform: none; filter: none; clip-path: none; }
+}

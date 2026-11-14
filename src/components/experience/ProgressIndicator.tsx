@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { navigateRelative, navigateToScene } from "@/animations/transitions";
+import { navigateRelative, travelToScene } from "@/animations/transitions";
 import { SCENES } from "@/data/scenes";
 import { useExperienceProgress } from "@/hooks/useExperienceProgress";
 import { useExperienceStore } from "@/store/experienceStore";
@@ -26,7 +26,7 @@ export function ProgressIndicator() {
     "ns-label grid size-11 place-items-center border border-ns-line text-ns-white transition-colors hover:border-accent hover:text-accent disabled:opacity-30 disabled:hover:border-ns-line disabled:hover:text-ns-white";
 
   return (
-    <footer className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-[var(--hud-pad)] pb-[var(--hud-pad)]">
+    <footer className="ns-hud pointer-events-none fixed inset-x-0 bottom-0 z-40 px-[var(--hud-pad)] pb-[var(--hud-pad)]">
       <div className="pointer-events-auto flex items-end justify-between gap-4">
         <div className="min-w-0" aria-live="polite">
           <p className="ns-label text-accent">Act {scene.act}</p>
@@ -39,7 +39,8 @@ export function ProgressIndicator() {
               <li key={item.id}>
                 <button
                   type="button"
-                  onClick={() => navigateToScene(item.id)}
+                  onClick={() => travelToScene(item.id)}
+                  data-cursor={item.title.toUpperCase()}
                   aria-current={item.id === currentScene ? "step" : undefined}
                   aria-label={`Go to act ${item.act}, ${item.title}`}
                   className="ns-label grid h-11 w-9 place-items-center text-ns-gray transition-colors hover:text-ns-white aria-[current]:text-accent"

@@ -8,6 +8,11 @@ import { isSceneId } from "@/data/scenes";
 import { useDeviceCapabilities } from "@/hooks/useDeviceCapabilities";
 import { useLenis } from "@/hooks/useLenis";
 import { useExperienceStore } from "@/store/experienceStore";
+import { SystemBoot } from "@/components/boot/SystemBoot";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ScreenTexture } from "@/components/ui/ScreenTexture";
+import { TransitionCurtain } from "@/components/ui/TransitionCurtain";
+import { GlobalNavigation } from "./GlobalNavigation";
 import { ProgressIndicator } from "./ProgressIndicator";
 import { SceneManager } from "./SceneManager";
 
@@ -19,6 +24,8 @@ export function ExperienceController() {
   const rootRef = useRef<HTMLDivElement>(null);
   const currentScene = useExperienceStore((s) => s.currentScene);
   const reducedMotion = useExperienceStore((s) => s.capabilities.reducedMotion);
+  const introComplete = useExperienceStore((s) => s.introComplete);
+  const menuOpen = useExperienceStore((s) => s.menuOpen);
 
   useDeviceCapabilities();
   useLenis(!reducedMotion);
@@ -48,12 +55,31 @@ export function ExperienceController() {
   }, [currentScene]);
 
   return (
-    <div ref={rootRef} data-scene={currentScene} className="relative">
+    <div
+      ref={rootRef}
+      data-scene={currentScene}
+      data-intro={introComplete ? "done" : "pending"}
+      className="relative"
+    >
       <a href="#experience" className="ns-skip-link ns-label">
         Skip to experience
       </a>
-      <SceneManager />
-      <ProgressIndicator />
+
+      {!introComplete && <SystemBoot />}
+
+      <div inert={!introComplete}>
+        <GlobalNavigation />
+      </div>
+
+      {/* Everything behind a modal layer (boot, menu) is inert. */}
+      <div inert={!introComplete || menuOpen}>
+        <SceneManager />
+        <ProgressIndicator />
+      </div>
+
+      <ScreenTexture />
+      <TransitionCurtain />
+      <CustomCursor />
     </div>
   );
 }

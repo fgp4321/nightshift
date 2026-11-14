@@ -8,6 +8,8 @@ export interface SceneDefinition {
   /** District caption shown in the HUD. */
   district: string;
   tagline: string;
+  /** In-world network state shown in the HUD. Fiction, labelled as such by context. */
+  status: string;
   /** Scroll length of the scene in viewport heights. Drives pacing. */
   length: number;
 }
@@ -23,6 +25,7 @@ export const SCENES: readonly SceneDefinition[] = [
     title: "Night City",
     district: "District 01 — Corporate Sector",
     tagline: "The city is always watching.",
+    status: "Network online",
     length: 5,
   },
   {
@@ -31,6 +34,7 @@ export const SCENES: readonly SceneDefinition[] = [
     title: "Cyberpunk OS",
     district: "Central Grid — NIGHT//OS",
     tagline: "Connection established.",
+    status: "Link established",
     length: 3,
   },
   {
@@ -39,14 +43,16 @@ export const SCENES: readonly SceneDefinition[] = [
     title: "Neon Underground",
     district: "Sublevel 9 — Neon District",
     tagline: "Reality is optional.",
+    status: "Signal untraced",
     length: 6,
   },
   {
     id: "beyond",
     act: "04",
     title: "Beyond the Grid",
-    district: "Signal lost",
+    district: "Outer perimeter",
     tagline: "The future is not waiting.",
+    status: "Signal lost",
     length: 2,
   },
 ] as const;
