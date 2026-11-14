@@ -1,0 +1,56 @@
+/*
+ * NIGHT//SHIFT — design tokens
+ * Single source of truth for colour, type, spacing and motion.
+ * Yellow = identity · Cyan = technical information · Magenta = underground.
+ */
+@theme {
+  /* Colour */
+  --color-ns-yellow: #fcee0a;
+  --color-ns-magenta: #ff245e;
+  --color-ns-cyan: #00e5ff;
+  --color-ns-black: #08090d;
+  --color-ns-dark: #11141c;
+  --color-ns-gray: #85858c;
+  --color-ns-white: #f1f1f1;
+  --color-ns-line: rgb(241 241 241 / 0.12);
+
+  /* Type */
+  --font-display: "Orbitron Variable", "Space Grotesk Variable", system-ui, sans-serif;
+  --font-sans: "Space Grotesk Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-monument: "Barlow Condensed", "Arial Narrow", "Space Grotesk Variable", sans-serif;
+
+  /* Fluid type scale */
+  --text-micro: 0.6875rem;
+  --text-monument: clamp(4rem, 17vw, 19rem);
+  --text-hero: clamp(2.75rem, 9vw, 9rem);
+  --text-title: clamp(1.75rem, 4vw, 3.5rem);
+
+  /* Motion */
+  --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap: cubic-bezier(0.7, 0, 0.2, 1);
+
+  /* Layout */
+  --breakpoint-xs: 26rem;
+}
+
+/* `inline` so utilities read --accent where they are used, not at :root. */
+@theme inline {
+  --color-accent: var(--accent);
+}
+
+:root {
+  --accent: #fcee0a;
+  --hud-pad: clamp(1rem, 2.4vw, 2rem);
+  --hud-h: 3.5rem;
+  --dur-fast: 160ms;
+  --dur-base: 320ms;
+  --dur-slow: 720ms;
+  color-scheme: dark;
+}
+
+/* Each world owns one accent. Never all colours at once. */
+[data-scene="city"] { --accent: #fcee0a; }
+[data-scene="os"] { --accent: #00e5ff; }
+[data-scene="underground"] { --accent: #ff245e; }
+[data-scene="beyond"] { --accent: #f1f1f1; }

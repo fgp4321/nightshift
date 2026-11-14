@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import "../styles/design-tokens.css";
+
+html {
+  background: var(--color-ns-black);
+  -webkit-text-size-adjust: 100%;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar { display: none; }
+
+/* Lenis — required base rules */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+body {
+  background: var(--color-ns-black);
+  color: var(--color-ns-white);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "tnum";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+::selection { background: var(--accent); color: var(--color-ns-black); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@layer components {
+  /* Technical micro-label: coordinates, statuses, HUD captions. */
+  .ns-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .ns-monument {
+    font-family: var(--font-monument);
+    font-weight: 800;
+    line-height: 0.82;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Blueprint grid used behind scene shells. */
+  .ns-grid {
+    background-image:
+      linear-gradient(to right, var(--color-ns-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-ns-line) 1px, transparent 1px);
+    background-size: clamp(3rem, 8vw, 7rem) clamp(3rem, 8vw, 7rem);
+    mask-image: radial-gradient(ellipse at 50% 60%, #000 10%, transparent 75%);
+  }
+
+  .ns-skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 100;
+    padding: 0.6rem 1rem;
+    background: var(--color-ns-yellow);
+    color: var(--color-ns-black);
+    transform: translateY(-200%);
+  }
+  .ns-skip-link:focus { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
