@@ -1,29 +1,49 @@
-import { SCENES, sceneElementId } from "@/data/scenes";
+"use client";
+
+import type { ComponentType } from "react";
+import { NightCityScene } from "@/components/city/NightCityScene";
+import { SCENES, sceneElementId, type SceneId } from "@/data/scenes";
+import { useExperienceStore } from "@/store/experienceStore";
 import { ScenePlaceholder } from "./ScenePlaceholder";
 
+/** Real scenes, as they are built. Acts without one show the placeholder. */
+const STAGES: Partial<Record<SceneId, ComponentType<{ active: boolean }>>> = {
+  city: NightCityScene,
+};
+
 /**
- * Lays out the acts on one continuous scroll track. Each act is a tall
- * section whose 100svh stage sticks to the viewport while the visitor
- * scrolls through it; the section's height sets the act's pacing.
+ * One continuous scroll track. Each act is a tall, empty section that only
+ * provides scroll distance (and therefore pacing); its content is a
+ * fixed, full-viewport stage shown while that act is current. Acts hand
+ * over by cutting on a covered frame, so stages never slide past each other.
  */
 export function SceneManager() {
+  const currentScene = useExperienceStore((s) => s.currentScene);
+
   return (
     <main id="experience">
-      {SCENES.map((scene, index) => (
-        <section
-          key={scene.id}
-          id={sceneElementId(scene.id)}
-          data-scene={scene.id}
-          aria-label={`Act ${scene.act} — ${scene.title}`}
-          className="relative"
-          style={{ height: `${scene.length * 100}svh` }}
-        >
-          <div className="sticky top-0 h-svh overflow-hidden">
-            {/* PLACEHOLDER (Phase 1): replaced by the real scene in Phases 3–6. */}
-            <ScenePlaceholder scene={scene} index={index} />
-          </div>
-        </section>
-      ))}
+      {SCENES.map((scene, index) => {
+        const Stage = STAGES[scene.id];
+        const active = scene.id === currentScene;
+        return (
+          <section
+            key={scene.id}
+            id={sceneElementId(scene.id)}
+            data-scene={scene.id}
+            aria-label={`Act ${scene.act} — ${scene.title}`}
+            style={{ height: `${scene.length * 100}svh` }}
+          >
+            <div className="fixed inset-0 overflow-hidden" style={{ visibility: active ? "visible" : "hidden" }}>
+              {Stage ? (
+                <Stage active={active} />
+              ) : (
+                // PLACEHOLDER: replaced by the real scene in Phases 4–6.
+                <ScenePlaceholder scene={scene} index={index} />
+              )}
+            </div>
+          </section>
+        );
+      })}
     </main>
   );
 }

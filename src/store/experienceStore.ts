@@ -17,6 +17,8 @@ interface ExperienceState {
   isTransitioning: boolean;
   menuOpen: boolean;
   capabilities: DeviceCapabilities;
+  /** False until capabilities have been detected in the browser. */
+  capabilitiesReady: boolean;
   /** True when motion should be simplified (user preference or weak device). */
   reducedEffects: boolean;
 
@@ -48,6 +50,7 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   isTransitioning: false,
   menuOpen: false,
   capabilities: SERVER_CAPABILITIES,
+  capabilitiesReady: false,
   reducedEffects: false,
 
   setScene: (scene) => {
@@ -75,6 +78,7 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   setCapabilities: (capabilities) =>
     set({
       capabilities,
+      capabilitiesReady: true,
       reducedEffects: capabilities.reducedMotion || capabilities.tier === "low",
     }),
 }));

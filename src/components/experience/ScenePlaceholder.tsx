@@ -8,7 +8,7 @@ import { useExperienceProgress } from "@/hooks/useExperienceProgress";
  * Phase 1 stand-in for a scene. It is wired to real scroll progress so the
  * scroll architecture can be verified before the scenes exist.
  */
-export function ScenePlaceholder({ scene, index }: { scene: SceneDefinition; index: number }) {
+export function ScenePlaceholder({ scene }: { scene: SceneDefinition; index: number }) {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const readoutRef = useRef<HTMLSpanElement>(null);
 
@@ -18,7 +18,7 @@ export function ScenePlaceholder({ scene, index }: { scene: SceneDefinition; ind
     if (readoutRef.current) readoutRef.current.textContent = p.toFixed(3);
   });
 
-  const Heading = index === 0 ? "h1" : "h2";
+  const Heading = "h2";
 
   return (
     <div className="relative flex h-full flex-col justify-end bg-ns-black px-[var(--hud-pad)] pb-[calc(var(--hud-h)+var(--hud-pad)*2)] pt-[var(--hud-pad)]">

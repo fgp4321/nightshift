@@ -193,3 +193,26 @@ html.ns-cursor-on, html.ns-cursor-on * { cursor: none !important; }
   75% { transform: translate(0.8%, -0.3%); clip-path: inset(12% 0 40% 0); }
   100% { transform: none; filter: none; clip-path: none; }
 }
+
+/* ───────────────────────── Phase 3 — Night City ───────────────────────── */
+
+/* Corner brackets of the access-terminal scan. */
+.ns-brackets {
+  --b: 2px;
+  --l: clamp(1.25rem, 4vw, 3rem);
+  background:
+    linear-gradient(var(--color-ns-cyan) 0 0) top left / var(--l) var(--b),
+    linear-gradient(var(--color-ns-cyan) 0 0) top left / var(--b) var(--l),
+    linear-gradient(var(--color-ns-cyan) 0 0) top right / var(--l) var(--b),
+    linear-gradient(var(--color-ns-cyan) 0 0) top right / var(--b) var(--l),
+    linear-gradient(var(--color-ns-cyan) 0 0) bottom left / var(--l) var(--b),
+    linear-gradient(var(--color-ns-cyan) 0 0) bottom left / var(--b) var(--l),
+    linear-gradient(var(--color-ns-cyan) 0 0) bottom right / var(--l) var(--b),
+    linear-gradient(var(--color-ns-cyan) 0 0) bottom right / var(--b) var(--l);
+  background-repeat: no-repeat;
+}
+.ns-scanline { top: 0; animation: ns-scan 1.6s var(--ease-snap) infinite alternate; }
+@keyframes ns-scan { from { top: 0; } to { top: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .ns-scanline { top: 50%; animation: none; }
+}
