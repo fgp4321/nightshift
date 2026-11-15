@@ -53,7 +53,7 @@ function Spectrum({ playing, reducedMotion }: { playing: boolean; reducedMotion:
 
 /** NIGHT RADIO — transport, ambience selection, volume and mute. */
 export function NightRadioApp({ reducedMotion }: { reducedMotion: boolean }) {
-  const { enabled, volume, muted, station, toggle, changeVolume, toggleMute, changeStation } = useAudio();
+  const { enabled, volume, muted, station, stationAuto, toggle, changeVolume, toggleMute, changeStation, followCity } = useAudio();
   const current = STATIONS.find((item) => item.id === station) ?? STATIONS[0];
   const status = !enabled ? "Standby" : muted ? "Muted" : "On air";
 
@@ -113,12 +113,23 @@ export function NightRadioApp({ reducedMotion }: { reducedMotion: boolean }) {
       <fieldset>
         <legend className="ns-label mb-2 text-ns-gray">Ambience</legend>
         <ul className="space-y-1">
+          <li>
+            <button
+              type="button"
+              onClick={followCity}
+              aria-pressed={stationAuto}
+              className="ns-label flex h-10 w-full items-center gap-3 border border-ns-line px-3 text-left text-ns-white transition-colors hover:border-ns-cyan aria-pressed:border-ns-cyan aria-pressed:bg-ns-cyan/10"
+            >
+              <span className="w-10 shrink-0 text-ns-cyan">Auto</span>
+              Follow the city
+            </button>
+          </li>
           {STATIONS.map((item) => (
             <li key={item.id}>
               <button
                 type="button"
                 onClick={() => changeStation(item.id)}
-                aria-pressed={item.id === station}
+                aria-pressed={!stationAuto && item.id === station}
                 data-cursor="TUNE"
                 className="group flex w-full items-baseline gap-3 border border-ns-line px-3 py-2 text-left transition-colors hover:border-ns-cyan aria-pressed:border-ns-cyan aria-pressed:bg-ns-cyan/10"
               >

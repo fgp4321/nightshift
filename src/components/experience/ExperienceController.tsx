@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { createMasterTimeline } from "@/animations/masterTimeline";
 import { navigateToScene } from "@/animations/transitions";
 import { isSceneId } from "@/data/scenes";
+import { useSceneAudio } from "@/hooks/useAudio";
 import { useDeviceCapabilities } from "@/hooks/useDeviceCapabilities";
 import { useLenis } from "@/hooks/useLenis";
 import { useExperienceStore } from "@/store/experienceStore";
@@ -29,6 +30,7 @@ export function ExperienceController() {
 
   useDeviceCapabilities();
   useLenis(!reducedMotion);
+  useSceneAudio();
 
   // Master timeline: created once, reverted on unmount.
   useEffect(() => {

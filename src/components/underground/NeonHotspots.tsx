@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ALL_FOUND_MESSAGE, HOTSPOTS } from "@/data/underground";
+import { playCue } from "@/lib/audio/engine";
 import { progress, subscribeProgress } from "@/lib/progress";
 
 interface HotspotState {
@@ -26,6 +27,7 @@ export function HotspotProvider({ children }: { children: ReactNode }) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   const open = useCallback((id: string) => {
+    playCue("blip");
     setOpenId(id);
     setFound((current) => (current.has(id) ? current : new Set(current).add(id)));
   }, []);

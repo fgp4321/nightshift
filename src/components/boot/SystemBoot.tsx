@@ -30,6 +30,8 @@ export function SystemBoot() {
     if (leaving.current || !root) return;
     leaving.current = true;
     sequenceRef.current?.kill();
+    // What is behind the overlay is about to be seen: let it start animating.
+    useExperienceStore.getState().setIntroLeaving(true);
 
     const q = gsap.utils.selector(root);
     const done = () => {

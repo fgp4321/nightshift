@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { createOsOutroTimeline, playOsIntro } from "@/animations/osAnimations";
+import { createOsOutroTimeline, OS_INTERFERENCE_START, playOsIntro } from "@/animations/osAnimations";
 import type { OsAppId } from "@/data/terminalCommands";
+import { playCue } from "@/lib/audio/engine";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { subscribeProgress } from "@/lib/progress";
 import { useExperienceStore } from "@/store/experienceStore";
@@ -57,7 +58,14 @@ export function CyberpunkOS({ active }: { active: boolean }) {
     const ctx = gsap.context(() => {
       timeline = createOsOutroTimeline(root, reducedMotion);
     }, root);
-    const unsubscribe = subscribeProgress(({ scenes }) => timeline?.progress(scenes.os));
+    let previous = 1;
+    const unsubscribe = subscribeProgress(({ scenes }) => {
+      timeline?.progress(scenes.os);
+      // The warning lands: one burst of noise, only when scrolling into it.
+      const mark = OS_INTERFERENCE_START + 0.09;
+      if (previous < mark && scenes.os >= mark && scenes.os < 1) playCue("glitch");
+      previous = scenes.os;
+    });
     return () => {
       unsubscribe();
       ctx.revert();

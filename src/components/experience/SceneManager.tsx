@@ -2,17 +2,17 @@
 
 import type { ComponentType } from "react";
 import { NightCityScene } from "@/components/city/NightCityScene";
+import { BeyondGrid } from "@/components/finale/BeyondGrid";
 import { CyberpunkOS } from "@/components/os/CyberpunkOS";
 import { UndergroundScene } from "@/components/underground/UndergroundScene";
 import { SCENES, sceneElementId, type SceneId } from "@/data/scenes";
 import { useExperienceStore } from "@/store/experienceStore";
-import { ScenePlaceholder } from "./ScenePlaceholder";
 
-/** Real scenes, as they are built. Acts without one show the placeholder. */
-const STAGES: Partial<Record<SceneId, ComponentType<{ active: boolean }>>> = {
+const STAGES: Record<SceneId, ComponentType<{ active: boolean }>> = {
   city: NightCityScene,
   os: CyberpunkOS,
   underground: UndergroundScene,
+  beyond: BeyondGrid,
 };
 
 /**
@@ -26,7 +26,7 @@ export function SceneManager() {
 
   return (
     <main id="experience">
-      {SCENES.map((scene, index) => {
+      {SCENES.map((scene) => {
         const Stage = STAGES[scene.id];
         const active = scene.id === currentScene;
         return (
@@ -38,12 +38,7 @@ export function SceneManager() {
             style={{ height: `${scene.length * 100}svh` }}
           >
             <div className="fixed inset-0 overflow-hidden" style={{ visibility: active ? "visible" : "hidden" }}>
-              {Stage ? (
-                <Stage active={active} />
-              ) : (
-                // PLACEHOLDER: replaced by the real scene in Phase 6.
-                <ScenePlaceholder scene={scene} index={index} />
-              )}
+              <Stage active={active} />
             </div>
           </section>
         );

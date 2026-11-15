@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { navigateRelative, travelToScene } from "@/animations/transitions";
 import { SCENES } from "@/data/scenes";
 import { useExperienceProgress } from "@/hooks/useExperienceProgress";
@@ -28,9 +29,20 @@ export function ProgressIndicator() {
   return (
     <footer className="ns-hud pointer-events-none fixed inset-x-0 bottom-0 z-40 px-[var(--hud-pad)] pb-[var(--hud-pad)]">
       <div className="pointer-events-auto flex items-end justify-between gap-4">
-        <div className="min-w-0" aria-live="polite">
-          <p className="ns-label text-accent">Act {scene.act}</p>
-          <p className="ns-label truncate text-ns-white">{scene.district}</p>
+        <div className="min-w-0 overflow-hidden" aria-live="polite">
+          {/* The caption rolls over when the act changes. */}
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={scene.id}
+              initial={{ y: 14, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -14, opacity: 0 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <p className="ns-label text-accent">Act {scene.act}</p>
+              <p className="ns-label truncate text-ns-white">{scene.district}</p>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         <nav aria-label="Acts" className="flex items-center gap-2">

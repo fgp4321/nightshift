@@ -18,6 +18,10 @@ interface ExperienceState {
   muted: boolean;
   /** Selected NIGHT RADIO ambience. */
   station: string;
+  /** True while the ambience follows the current world automatically. */
+  stationAuto: boolean;
+  /** The boot overlay has started opening: what is behind it is now visible. */
+  introLeaving: boolean;
   isTransitioning: boolean;
   menuOpen: boolean;
   capabilities: DeviceCapabilities;
@@ -34,6 +38,8 @@ interface ExperienceState {
   setVolume: (volume: number) => void;
   setMuted: (muted: boolean) => void;
   setStation: (station: string) => void;
+  setStationAuto: (auto: boolean) => void;
+  setIntroLeaving: (leaving: boolean) => void;
   setTransitioning: (value: boolean) => void;
   setMenuOpen: (open: boolean) => void;
   setCapabilities: (capabilities: DeviceCapabilities) => void;
@@ -55,6 +61,8 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   volume: 0.6,
   muted: false,
   station: DEFAULT_STATION,
+  stationAuto: true,
+  introLeaving: false,
   isTransitioning: false,
   menuOpen: false,
   capabilities: SERVER_CAPABILITIES,
@@ -66,11 +74,11 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   },
   completeIntro: () => {
     writeIntroFlag(true);
-    set({ introComplete: true });
+    set({ introComplete: true, introLeaving: false });
   },
   resetIntro: () => {
     writeIntroFlag(false);
-    set({ introComplete: false });
+    set({ introComplete: false, introLeaving: false });
   },
   hydrateIntro: () => {
     try {
@@ -83,6 +91,8 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)) }),
   setMuted: (muted) => set({ muted }),
   setStation: (station) => set({ station }),
+  setStationAuto: (stationAuto) => set({ stationAuto }),
+  setIntroLeaving: (introLeaving) => set({ introLeaving }),
   setTransitioning: (isTransitioning) => set({ isTransitioning }),
   setMenuOpen: (menuOpen) => set({ menuOpen }),
   setCapabilities: (capabilities) =>

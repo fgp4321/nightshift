@@ -189,3 +189,55 @@ export function setAmbienceStation(id: string) {
 export function getAnalyser(): AnalyserNode | null {
   return analyser;
 }
+
+export type AudioCue = "whoosh" | "thud" | "glitch" | "blip";
+
+/**
+ * One-shot transition sounds, synthesised on demand and routed through the
+ * master gain (so volume applies). Silent unless the visitor has turned
+ * sound on and not muted it.
+ */
+export function playCue(cue: AudioCue) {
+  if (!ctx || !master || !wanted || muted || ctx.state !== "running") return;
+  const context = ctx;
+  const now = context.currentTime;
+  const out = new GainNode(context, { gain: 0 });
+  out.connect(master);
+
+  if (cue === "whoosh") {
+    const source = context.createBufferSource();
+    source.buffer = noiseBuffer(context, false);
+    const filter = new BiquadFilterNode(context, { type: "bandpass", frequency: 300, Q: 1.4 });
+    filter.frequency.exponentialRampToValueAtTime(2600, now + 0.45);
+    filter.frequency.exponentialRampToValueAtTime(240, now + 1.1);
+    out.gain.linearRampToValueAtTime(0.5, now + 0.4);
+    out.gain.linearRampToValueAtTime(0, now + 1.15);
+    source.connect(filter).connect(out);
+    source.start(now);
+    source.stop(now + 1.2);
+  } else if (cue === "thud") {
+    const osc = new OscillatorNode(context, { type: "sine", frequency: 95 });
+    osc.frequency.exponentialRampToValueAtTime(38, now + 0.4);
+    out.gain.setValueAtTime(0.7, now);
+    out.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    osc.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.55);
+  } else if (cue === "glitch") {
+    const osc = new OscillatorNode(context, { type: "square", frequency: 220 });
+    [1800, 90, 640, 3100, 140, 980, 60].forEach((frequency, i) => osc.frequency.setValueAtTime(frequency, now + i * 0.07));
+    out.gain.setValueAtTime(0.16, now);
+    out.gain.setValueAtTime(0, now + 0.5);
+    osc.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.52);
+  } else {
+    const osc = new OscillatorNode(context, { type: "sine", frequency: 880 });
+    osc.frequency.exponentialRampToValueAtTime(1320, now + 0.07);
+    out.gain.setValueAtTime(0.18, now);
+    out.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+    osc.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.16);
+  }
+}

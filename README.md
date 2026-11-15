@@ -38,6 +38,8 @@ npm run build && npm start
 | OS transitions | `src/animations/osAnimations.ts` | Time-based intro (usable immediately, also via deep link) and a scroll-scrubbed interference → glitch → collapse. |
 | Neon Underground | `src/components/underground/`, `src/data/underground.ts` | Alley → club → horizontal poster wall → service tunnel, built from procedural SVG, CSS and type. Six hidden hotspots with a found-counter. |
 | Underground timeline | `src/animations/undergroundAnimations.ts` | One scrubbed timeline for the act; rebuilt on resize because the horizontal distance is measured. |
+| Beyond the Grid | `src/components/finale/`, `src/animations/finaleAnimations.ts` | The city, redrawn from the same layout on a 2D canvas, pulls away and goes dark; statement → wordmark → credits, world links and restart. |
+| Sound per world | `src/hooks/useAudio.ts`, `src/data/stations.ts` | The ambience follows the current world unless a station is chosen by hand in NIGHT RADIO. Transition cues (`playCue`) are synthesised one-shots. |
 | Quality tiers | `src/utils/` | Capability detection and per-tier budgets for the 3D scenes. |
 | Design tokens | `src/styles/design-tokens.css` | Colour, type, motion. One accent per world via `[data-scene]`. |
 
@@ -60,13 +62,11 @@ Decisions worth knowing:
 | 3 — Night City 3D | Done |
 | 4 — Cyberpunk OS | Done |
 | 5 — Neon Underground | Done |
-| 6 — Final act & motion polish | Next |
-| 7 — Responsive & optimisation | Pending |
+| 6 — Final act & motion polish | Done |
+| 7 — Responsive & optimisation | Next |
 
-### Documented placeholders
+### Notes and known limits
 
-- `src/components/experience/ScenePlaceholder.tsx` stands in for act 04 until Phase 6. It is wired to real scroll progress.
 - `public/{models,textures,images,audio,fonts}` are empty. No asset is referenced that does not exist.
 - React Three Fiber 9.8 logs a `THREE.Clock` deprecation warning with three 0.187. It comes from the library, is harmless, and will go away with an R3F update.
-- The ambience does not yet change automatically from world to world; that and transition sounds arrive in Phase 6. Stations can be chosen by hand in NIGHT RADIO.
 - NETRUNNER is scripted fiction: it contacts no network and reads nothing from the device.

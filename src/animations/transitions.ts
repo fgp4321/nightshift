@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { SCENES, sceneElementId, type SceneId } from "@/data/scenes";
+import { playCue } from "@/lib/audio/engine";
 import { getLenis, lockScroll, unlockScroll } from "@/lib/scroll";
 import { useExperienceStore } from "@/store/experienceStore";
 
@@ -78,6 +79,7 @@ export function travelToScene(id: SceneId, options: { onCovered?: () => void } =
 
   store.setTransitioning(true);
   lockScroll("transition");
+  playCue("whoosh");
   curtain.dataset.scene = id;
   const title = curtain.querySelector("[data-curtain-title]");
   const kicker = curtain.querySelector("[data-curtain-kicker]");
@@ -96,4 +98,16 @@ export function travelToScene(id: SceneId, options: { onCovered?: () => void } =
     .to(curtain, { clipPath: "inset(0% 0 0 0)", duration: 0.65, ease: "power3.inOut" })
     .call(jump)
     .to(curtain, { clipPath: "inset(0 0 100% 0)", duration: 0.75, ease: "power3.inOut", delay: 0.35 });
+}
+
+/**
+ * Starts over: replays the boot sequence from the top of ACT 01.
+ * The boot overlay covers the screen before the scroll position resets.
+ */
+export function restartExperience() {
+  const store = useExperienceStore.getState();
+  if (store.isTransitioning) return;
+  store.setMenuOpen(false);
+  store.resetIntro();
+  jumpTo(0);
 }

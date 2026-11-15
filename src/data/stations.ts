@@ -1,3 +1,5 @@
+import type { SceneId } from "./scenes";
+
 export type AudioLayer = "rumble" | "rain" | "drone" | "hum" | "club";
 
 export interface Station {
@@ -42,3 +44,11 @@ export const STATIONS: Station[] = [
 ];
 
 export const DEFAULT_STATION = STATIONS[0].id;
+
+/** The ambience each world tunes to while NIGHT RADIO is on "follow the city". */
+export const SCENE_STATION: Record<SceneId, string> = {
+  city: "city",
+  os: "industrial",
+  underground: "sublevel",
+  beyond: "rain",
+};

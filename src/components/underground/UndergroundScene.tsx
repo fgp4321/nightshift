@@ -97,6 +97,14 @@ export function UndergroundScene({ active }: { active: boolean }) {
                   <span className="ns-label mt-2 block text-ns-white">Read ▸</span>
                 </span>
               </Hotspot>
+              <p className="ns-label ns-neon ns-flicker absolute left-1/2 top-[33%] -translate-x-1/2 whitespace-nowrap [animation-delay:-2s]" aria-hidden>
+                ↓ The Low End ↓
+              </p>
+              <p className="ns-monument absolute bottom-[30%] left-[19%] text-[clamp(1rem,2.2vw,2rem)] leading-none text-ns-white/70 [transform:perspective(40rem)_rotateY(38deg)] max-md:hidden" aria-hidden>
+                No signal
+                <br />
+                <span className="text-ns-magenta">no masters</span>
+              </p>
               <p className="ns-monument ns-neon ns-flicker absolute right-[9%] top-[17%] text-[clamp(2.5rem,6vw,5.5rem)] [transform:perspective(40rem)_rotateY(-34deg)]" aria-hidden>
                 88.7
               </p>
