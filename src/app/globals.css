@@ -283,3 +283,120 @@ html.ns-cursor-on, html.ns-cursor-on * { cursor: none !important; }
   border: 0;
   border-radius: 0;
 }
+
+/* ───────────────────────── Phase 5 — Neon Underground ───────────────────────── */
+
+/* Neon lettering and frames */
+.ns-neon {
+  color: #ffd3de;
+  text-shadow: 0 0 0.06em #fff, 0 0 0.25em var(--color-ns-magenta), 0 0 0.7em var(--color-ns-magenta), 0 0 1.6em rgb(255 36 94 / 0.6);
+}
+.ns-neon-box {
+  border: 2px solid var(--color-ns-magenta);
+  background: rgb(8 4 8 / 0.75);
+  box-shadow: 0 0 18px rgb(255 36 94 / 0.55), inset 0 0 18px rgb(255 36 94 / 0.25);
+}
+.ns-flicker { animation: ns-flicker 5.5s steps(1) infinite; }
+@keyframes ns-flicker {
+  0%, 100% { opacity: 1; }
+  41% { opacity: 1; }
+  42% { opacity: 0.25; }
+  43.5% { opacity: 1; }
+  46% { opacity: 0.4; }
+  46.8% { opacity: 1; }
+  78% { opacity: 0.6; }
+  78.6% { opacity: 1; }
+}
+
+/* Controlled chromatic aberration: amount comes from --ca. */
+.ns-chroma {
+  --ca: 0em;
+  text-shadow: calc(var(--ca) * -1) 0 rgb(0 229 255 / 0.75), var(--ca) 0 rgb(255 36 94 / 0.75);
+}
+.ns-outline { color: transparent; -webkit-text-stroke: 1.5px rgb(241 241 241 / 0.55); }
+
+/* Small screens-within-the-scene */
+.ns-scanned { background-image: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 3px); }
+
+/* Fog banks drifting through the alley */
+.ns-fog {
+  background:
+    radial-gradient(60% 30% at 20% 70%, rgb(255 36 94 / 0.16), transparent 70%),
+    radial-gradient(50% 26% at 78% 62%, rgb(160 30 80 / 0.2), transparent 70%),
+    radial-gradient(70% 22% at 50% 86%, rgb(90 20 50 / 0.3), transparent 70%);
+  background-size: 160% 100%;
+  filter: blur(18px);
+  animation: ns-fog 26s ease-in-out infinite alternate;
+}
+@keyframes ns-fog { from { background-position: 0% 0; } to { background-position: 100% 0; } }
+
+/* Hotspots */
+.ns-hotspot { transition: filter var(--dur-base), transform var(--dur-base) var(--ease-cine); }
+.ns-hotspot:hover, .ns-hotspot:focus-visible { filter: brightness(1.35); }
+.ns-hotspot-marker {
+  position: relative;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+}
+.ns-hotspot-marker[data-static] { width: 1rem; height: 1rem; }
+.ns-hotspot-marker span {
+  width: 0.7rem;
+  height: 0.7rem;
+  rotate: 45deg;
+  border: 2px solid var(--color-ns-magenta);
+  background: var(--color-ns-black);
+  box-shadow: 0 0 12px var(--color-ns-magenta);
+}
+.ns-hotspot-marker:not([data-static])::after {
+  content: "";
+  position: absolute;
+  inset: 0.55rem;
+  rotate: 45deg;
+  border: 1px solid var(--color-ns-magenta);
+  animation: ns-ping 2.2s var(--ease-cine) infinite;
+}
+.ns-hotspot[data-found] .ns-hotspot-marker span { background: var(--color-ns-magenta); }
+.ns-hotspot[data-found] .ns-hotspot-marker::after { animation: none; opacity: 0; }
+@keyframes ns-ping { from { scale: 0.6; opacity: 0.9; } to { scale: 1.7; opacity: 0; } }
+
+/* Club */
+.ns-beam {
+  position: absolute;
+  left: 50%;
+  top: -6%;
+  width: 16vmax;
+  height: 120%;
+  margin-left: -8vmax;
+  transform-origin: 50% 0;
+  background: linear-gradient(to bottom, rgb(255 36 94 / 0.5), transparent 75%);
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+  rotate: var(--angle);
+  animation: ns-beam 7s ease-in-out infinite alternate;
+}
+@keyframes ns-beam { from { rotate: calc(var(--angle) - 9deg); opacity: 0.45; } to { rotate: calc(var(--angle) + 9deg); opacity: 1; } }
+.ns-cone { animation: ns-thump 476ms var(--ease-cine) infinite; }
+@keyframes ns-thump { 0% { scale: 1.07; } 100% { scale: 1; } }
+.ns-eqbar { height: 100%; transform-origin: bottom; animation: ns-eq 620ms ease-in-out infinite alternate; }
+
+/* Service tunnel frames */
+.ns-ring {
+  position: absolute;
+  inset: 9% 7%;
+  visibility: hidden;
+  border: 2px solid var(--color-ns-magenta);
+  box-shadow: 0 0 14px rgb(255 36 94 / 0.7), inset 0 0 22px rgb(255 36 94 / 0.25), 0 0 0 10px #0c070d, 0 0 0 11px #2a1424;
+  will-change: transform;
+}
+.ns-ring-lamp {
+  position: absolute;
+  width: 5%;
+  height: 4px;
+  background: #ffd3de;
+  box-shadow: 0 0 16px 3px var(--color-ns-magenta);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ns-flicker, .ns-fog, .ns-beam, .ns-cone, .ns-eqbar, .ns-hotspot-marker::after { animation: none !important; }
+}

@@ -36,6 +36,8 @@ npm run build && npm start
 | City camera & captions | `src/animations/cityAnimations.ts` | Two paused GSAP timelines (flight path, captions) scrubbed by the act's scroll progress. |
 | NIGHT//OS | `src/components/os/`, `src/data/` | Desktop, window manager and four apps (NETRUNNER, DATABASE, CITY MAP, NIGHT RADIO). All content is original fiction in `src/data/`. |
 | OS transitions | `src/animations/osAnimations.ts` | Time-based intro (usable immediately, also via deep link) and a scroll-scrubbed interference → glitch → collapse. |
+| Neon Underground | `src/components/underground/`, `src/data/underground.ts` | Alley → club → horizontal poster wall → service tunnel, built from procedural SVG, CSS and type. Six hidden hotspots with a found-counter. |
+| Underground timeline | `src/animations/undergroundAnimations.ts` | One scrubbed timeline for the act; rebuilt on resize because the horizontal distance is measured. |
 | Quality tiers | `src/utils/` | Capability detection and per-tier budgets for the 3D scenes. |
 | Design tokens | `src/styles/design-tokens.css` | Colour, type, motion. One accent per world via `[data-scene]`. |
 
@@ -43,6 +45,7 @@ Decisions worth knowing:
 
 - **Fixed stages, not pinning.** Each act is a tall, empty section that only provides scroll distance; its content is a fixed full-viewport stage shown while that act is current. No pin-spacers, so resize, refresh and deep links stay deterministic, and acts hand over on a covered frame instead of sliding past each other.
 - **The city is painted, not lit.** Every surface is an unlit shader, which keeps ACT 01 to a handful of draw calls. Rendering stops while another act is on screen.
+- **The underground is drawn, not rendered.** ACT 03 is deliberately 2D (SVG, CSS, type) so it reads as a different world from the 3D city and costs no second WebGL context. Its only filter, an SVG displacement during the door reveal, is skipped on the low tier.
 - **Degradation.** Three quality tiers set building count, rain density, pixel ratio and antialiasing. Reduced motion cuts between the five camera shots instead of flying. Without WebGL an SVG elevation of the same generated city is shown; captions and the hand-off still work.
 - **Self-hosted fonts** (Fontsource): Orbitron, Space Grotesk, JetBrains Mono, Barlow Condensed. No request to Google Fonts.
 - **Synthesised audio instead of Howler.** The ambience is generated in the browser, so there are no audio files to license or ship.
@@ -56,13 +59,13 @@ Decisions worth knowing:
 | 2 — Design system & intro | Done |
 | 3 — Night City 3D | Done |
 | 4 — Cyberpunk OS | Done |
-| 5 — Neon Underground | Next |
-| 6 — Final act & motion polish | Pending |
+| 5 — Neon Underground | Done |
+| 6 — Final act & motion polish | Next |
 | 7 — Responsive & optimisation | Pending |
 
 ### Documented placeholders
 
-- `src/components/experience/ScenePlaceholder.tsx` stands in for acts 03–04 until Phases 5–6. It is wired to real scroll progress.
+- `src/components/experience/ScenePlaceholder.tsx` stands in for act 04 until Phase 6. It is wired to real scroll progress.
 - `public/{models,textures,images,audio,fonts}` are empty. No asset is referenced that does not exist.
 - React Three Fiber 9.8 logs a `THREE.Clock` deprecation warning with three 0.187. It comes from the library, is harmless, and will go away with an R3F update.
 - The ambience does not yet change automatically from world to world; that and transition sounds arrive in Phase 6. Stations can be chosen by hand in NIGHT RADIO.
