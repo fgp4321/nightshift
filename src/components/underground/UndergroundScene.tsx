@@ -23,7 +23,8 @@ const bottom = "bottom-[calc(var(--hud-h)+var(--hud-pad)*2.5)]";
 export function UndergroundScene({ active }: { active: boolean }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useExperienceStore((s) => s.capabilities.reducedMotion);
-  const lightweight = useExperienceStore((s) => s.capabilities.tier === "low");
+  // The displacement filter is the one costly effect of the act: top tier only.
+  const lightweight = useExperienceStore((s) => s.capabilities.tier !== "high");
 
   useEffect(() => {
     const root = rootRef.current;
@@ -69,7 +70,7 @@ export function UndergroundScene({ active }: { active: boolean }) {
       <div ref={rootRef} className="relative h-full overflow-hidden bg-[#050408] text-ns-white">
         <svg className="absolute size-0" aria-hidden>
           <filter id="ug-distort" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.09" numOctaves="2" seed="7" result="noise" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.09" numOctaves="1" seed="7" result="noise" />
             <feDisplacementMap data-ug="displace" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </svg>

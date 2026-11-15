@@ -52,7 +52,7 @@ function Spectrum({ playing, reducedMotion }: { playing: boolean; reducedMotion:
 }
 
 /** NIGHT RADIO — transport, ambience selection, volume and mute. */
-export function NightRadioApp({ reducedMotion }: { reducedMotion: boolean }) {
+export function NightRadioApp({ reducedMotion, visible }: { reducedMotion: boolean; visible: boolean }) {
   const { enabled, volume, muted, station, stationAuto, toggle, changeVolume, toggleMute, changeStation, followCity } = useAudio();
   const current = STATIONS.find((item) => item.id === station) ?? STATIONS[0];
   const status = !enabled ? "Standby" : muted ? "Muted" : "On air";
@@ -69,7 +69,8 @@ export function NightRadioApp({ reducedMotion }: { reducedMotion: boolean }) {
         </div>
         <p className="ns-label mt-1 text-ns-cyan">{current.name}</p>
         <div className="mt-3">
-          <Spectrum playing={enabled && !muted} reducedMotion={reducedMotion} />
+          {/* Only draws while this act is on screen. */}
+          <Spectrum playing={visible && enabled && !muted} reducedMotion={reducedMotion} />
         </div>
       </div>
 

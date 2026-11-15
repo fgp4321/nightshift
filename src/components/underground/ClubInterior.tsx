@@ -30,13 +30,15 @@ export function ClubInterior() {
       <div className="absolute inset-x-0 top-[58%] h-px bg-ns-magenta/30" aria-hidden />
 
       {/* Light beams */}
-      <div className="absolute inset-0 mix-blend-screen" aria-hidden>
+      <div className="absolute inset-0" aria-hidden>
         {[-34, -16, 0, 17, 33].map((angle, i) => (
           <div key={angle} className="ns-beam" style={{ ["--angle" as string]: `${angle}deg`, animationDelay: `${i * -1.3}s` }} />
         ))}
       </div>
 
       {/* The sign is a hotspot. */}
+      {/* Soft halo behind the sign: one gradient instead of a huge text blur. */}
+      <div className="absolute inset-x-[8%] top-[12%] h-[38%] bg-[radial-gradient(ellipse_at_center,rgb(255_36_94/0.38),transparent_68%)]" aria-hidden />
       <div data-ug="club-sign" className="absolute inset-x-0 top-[21%] flex justify-center px-4">
         <Hotspot id="lowend" className="block">
           <span className="ns-neon ns-monument block text-center text-[clamp(3.5rem,13vw,13rem)]">The Low End</span>
@@ -62,7 +64,7 @@ export function ClubInterior() {
 
       {/* Equaliser wall and crowd */}
       <div className="absolute inset-x-[14%] bottom-[20%] flex h-[16%] items-end gap-[1.2%] opacity-60" aria-hidden>
-        {Array.from({ length: 30 }, (_, i) => (
+        {Array.from({ length: 22 }, (_, i) => (
           <span key={i} className="ns-eqbar flex-1 bg-ns-magenta" style={{ animationDelay: `${(i * 137) % 900}ms` }} />
         ))}
       </div>

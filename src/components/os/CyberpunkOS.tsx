@@ -64,6 +64,7 @@ export function CyberpunkOS({ active }: { active: boolean }) {
       // The warning lands: one burst of noise, only when scrolling into it.
       const mark = OS_INTERFERENCE_START + 0.09;
       if (previous < mark && scenes.os >= mark && scenes.os < 1) playCue("glitch");
+      useExperienceStore.getState().setSignalLost(scenes.os >= OS_INTERFERENCE_START + 0.03 && scenes.os < 1);
       previous = scenes.os;
     });
     return () => {
@@ -84,7 +85,7 @@ export function CyberpunkOS({ active }: { active: boolean }) {
     if (id === "netrunner") return <TerminalApp openApp={open} reducedMotion={reducedMotion} />;
     if (id === "database") return <DatabaseApp />;
     if (id === "map") return <CityMapApp />;
-    return <NightRadioApp reducedMotion={reducedMotion} />;
+    return <NightRadioApp reducedMotion={reducedMotion} visible={active} />;
   };
 
   return (

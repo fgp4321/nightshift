@@ -2,7 +2,7 @@ import gsap from "gsap";
 
 interface UndergroundOptions {
   reducedMotion: boolean;
-  /** Skip the SVG displacement filter on weak devices. */
+  /** Skip the SVG displacement filter (everything below the top quality tier). */
   lightweight: boolean;
 }
 

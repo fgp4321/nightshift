@@ -50,6 +50,18 @@ export function ExperienceController() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
+  // When the boot overlay leaves, keyboard focus would be lost with it:
+  // hand it to the experience instead.
+  const bootWasShown = useRef(false);
+  useEffect(() => {
+    if (!introComplete) {
+      bootWasShown.current = true;
+    } else if (bootWasShown.current) {
+      bootWasShown.current = false;
+      document.getElementById("experience")?.focus({ preventScroll: true });
+    }
+  }, [introComplete]);
+
   // Keep the URL shareable without adding history entries.
   useEffect(() => {
     const url = currentScene === "city" ? window.location.pathname : `#${currentScene}`;

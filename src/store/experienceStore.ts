@@ -24,6 +24,8 @@ interface ExperienceState {
   introLeaving: boolean;
   isTransitioning: boolean;
   menuOpen: boolean;
+  /** NIGHT//OS is losing its link (drives the HUD status during the interference). */
+  signalLost: boolean;
   capabilities: DeviceCapabilities;
   /** False until capabilities have been detected in the browser. */
   capabilitiesReady: boolean;
@@ -42,6 +44,7 @@ interface ExperienceState {
   setIntroLeaving: (leaving: boolean) => void;
   setTransitioning: (value: boolean) => void;
   setMenuOpen: (open: boolean) => void;
+  setSignalLost: (lost: boolean) => void;
   setCapabilities: (capabilities: DeviceCapabilities) => void;
 }
 
@@ -65,6 +68,7 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   introLeaving: false,
   isTransitioning: false,
   menuOpen: false,
+  signalLost: false,
   capabilities: SERVER_CAPABILITIES,
   capabilitiesReady: false,
   reducedEffects: false,
@@ -95,6 +99,9 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   setIntroLeaving: (introLeaving) => set({ introLeaving }),
   setTransitioning: (isTransitioning) => set({ isTransitioning }),
   setMenuOpen: (menuOpen) => set({ menuOpen }),
+  setSignalLost: (signalLost) => {
+    if (get().signalLost !== signalLost) set({ signalLost });
+  },
   setCapabilities: (capabilities) =>
     set({
       capabilities,

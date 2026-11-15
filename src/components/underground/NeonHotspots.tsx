@@ -109,7 +109,7 @@ export function HotspotPanel() {
   return (
     <AnimatePresence>
       {hotspot && (
-        <motion.aside
+        <motion.div
           key={hotspot.id}
           role="status"
           aria-label={`Intercepted: ${hotspot.label}`}
@@ -140,7 +140,7 @@ export function HotspotPanel() {
             ))}
           </div>
           {complete && <p className="mt-4 border-t border-ns-magenta/50 pt-3 text-sm leading-relaxed text-ns-yellow">{ALL_FOUND_MESSAGE}</p>}
-        </motion.aside>
+        </motion.div>
       )}
     </AnimatePresence>
   );

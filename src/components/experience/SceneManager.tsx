@@ -25,7 +25,7 @@ export function SceneManager() {
   const currentScene = useExperienceStore((s) => s.currentScene);
 
   return (
-    <main id="experience">
+    <main id="experience" tabIndex={-1} className="outline-none">
       {SCENES.map((scene) => {
         const Stage = STAGES[scene.id];
         const active = scene.id === currentScene;
@@ -37,7 +37,11 @@ export function SceneManager() {
             aria-label={`Act ${scene.act} — ${scene.title}`}
             style={{ height: `${scene.length * 100}svh` }}
           >
-            <div className="fixed inset-0 overflow-hidden" style={{ visibility: active ? "visible" : "hidden" }}>
+            <div
+              className="ns-stage fixed inset-0 overflow-hidden"
+              data-active={active || undefined}
+              style={{ visibility: active ? "visible" : "hidden" }}
+            >
               <Stage active={active} />
             </div>
           </section>

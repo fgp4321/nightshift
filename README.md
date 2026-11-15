@@ -63,7 +63,9 @@ Decisions worth knowing:
 | 4 — Cyberpunk OS | Done |
 | 5 — Neon Underground | Done |
 | 6 — Final act & motion polish | Done |
-| 7 — Responsive & optimisation | Next |
+| 7 — Responsive & optimisation | Done |
+
+Full report (features, simplifications, tests run, measurements, what was not tested): [`docs/INFORME_IMPLEMENTACION.md`](docs/INFORME_IMPLEMENTACION.md).
 
 ### Notes and known limits
 

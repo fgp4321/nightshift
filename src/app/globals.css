@@ -289,7 +289,8 @@ html.ns-cursor-on, html.ns-cursor-on * { cursor: none !important; }
 /* Neon lettering and frames */
 .ns-neon {
   color: #ffd3de;
-  text-shadow: 0 0 0.06em #fff, 0 0 0.25em var(--color-ns-magenta), 0 0 0.7em var(--color-ns-magenta), 0 0 1.6em rgb(255 36 94 / 0.6);
+  /* Tight radii: wide text-shadow blurs on monumental type are very costly. */
+  text-shadow: 0 0 0.04em #fff, 0 0 0.16em var(--color-ns-magenta), 0 0 0.42em var(--color-ns-magenta);
 }
 .ns-neon-box {
   border: 2px solid var(--color-ns-magenta);
@@ -318,17 +319,18 @@ html.ns-cursor-on, html.ns-cursor-on * { cursor: none !important; }
 /* Small screens-within-the-scene */
 .ns-scanned { background-image: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 3px); }
 
-/* Fog banks drifting through the alley */
+/* Fog banks drifting through the alley. Wider than the stage and moved
+   with a transform, so the drift never repaints. */
 .ns-fog {
+  inset: 0 -30% !important;
   background:
-    radial-gradient(60% 30% at 20% 70%, rgb(255 36 94 / 0.16), transparent 70%),
-    radial-gradient(50% 26% at 78% 62%, rgb(160 30 80 / 0.2), transparent 70%),
-    radial-gradient(70% 22% at 50% 86%, rgb(90 20 50 / 0.3), transparent 70%);
-  background-size: 160% 100%;
-  filter: blur(18px);
+    radial-gradient(40% 30% at 20% 70%, rgb(255 36 94 / 0.16), transparent 70%),
+    radial-gradient(34% 26% at 70% 62%, rgb(160 30 80 / 0.2), transparent 70%),
+    radial-gradient(46% 22% at 48% 86%, rgb(90 20 50 / 0.3), transparent 70%);
+  will-change: transform;
   animation: ns-fog 26s ease-in-out infinite alternate;
 }
-@keyframes ns-fog { from { background-position: 0% 0; } to { background-position: 100% 0; } }
+@keyframes ns-fog { from { transform: translateX(-12%); } to { transform: translateX(12%); } }
 
 /* Hotspots */
 .ns-hotspot { transition: filter var(--dur-base), transform var(--dur-base) var(--ease-cine); }
@@ -373,6 +375,7 @@ html.ns-cursor-on, html.ns-cursor-on * { cursor: none !important; }
   background: linear-gradient(to bottom, rgb(255 36 94 / 0.5), transparent 75%);
   clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
   rotate: var(--angle);
+  will-change: rotate, opacity;
   animation: ns-beam 7s ease-in-out infinite alternate;
 }
 @keyframes ns-beam { from { rotate: calc(var(--angle) - 9deg); opacity: 0.45; } to { rotate: calc(var(--angle) + 9deg); opacity: 1; } }
@@ -399,4 +402,18 @@ html.ns-cursor-on, html.ns-cursor-on * { cursor: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .ns-flicker, .ns-fog, .ns-beam, .ns-cone, .ns-eqbar, .ns-hotspot-marker::after { animation: none !important; }
+}
+
+/* ───────────────────────── Phase 7 — housekeeping ───────────────────────── */
+
+/* Acts that are not on screen do not run their CSS animations. */
+.ns-stage:not([data-active]) *,
+.ns-stage:not([data-active]) *::before,
+.ns-stage:not([data-active]) *::after { animation-play-state: paused !important; }
+
+/* Backdrop blur is expensive on phones and tablets; the panels are opaque enough without it. */
+@media (pointer: coarse) {
+  .ns-holo, .ns-window { backdrop-filter: none; }
+  .ns-holo { background-color: rgb(10 13 19 / 0.92); }
+  .ns-window { background: #090b10; }
 }

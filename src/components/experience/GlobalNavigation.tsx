@@ -27,6 +27,7 @@ export function GlobalNavigation() {
   const menuOpen = useExperienceStore((s) => s.menuOpen);
   const setMenuOpen = useExperienceStore((s) => s.setMenuOpen);
   const currentScene = useExperienceStore((s) => s.currentScene);
+  const signalLost = useExperienceStore((s) => s.signalLost && s.currentScene === "os");
   const scene = SCENES.find((item) => item.id === currentScene) ?? SCENES[0];
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
@@ -52,9 +53,9 @@ export function GlobalNavigation() {
 
         <div className="pointer-events-auto flex items-center gap-2">
           <p className="ns-label mr-3 hidden items-center gap-3 md:flex" aria-live="polite">
-            <span className="flex items-center gap-2 text-ns-white">
-              <span className="size-1.5 animate-pulse bg-accent" aria-hidden />
-              {scene.status}
+            <span className={`flex items-center gap-2 ${signalLost ? "text-ns-magenta" : "text-ns-white"}`}>
+              <span className={`size-1.5 animate-pulse ${signalLost ? "bg-ns-magenta" : "bg-accent"}`} aria-hidden />
+              {signalLost ? "Signal dropping" : scene.status}
             </span>
             <Clock />
           </p>
