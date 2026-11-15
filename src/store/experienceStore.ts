@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { SceneId } from "@/data/scenes";
+import { DEFAULT_STATION } from "@/data/stations";
 import { SERVER_CAPABILITIES, type DeviceCapabilities } from "@/utils/deviceCapabilities";
 
 const INTRO_KEY = "nightshift:intro-complete";
@@ -14,6 +15,9 @@ interface ExperienceState {
   audioEnabled: boolean;
   /** 0–1 master volume for the ambience. */
   volume: number;
+  muted: boolean;
+  /** Selected NIGHT RADIO ambience. */
+  station: string;
   isTransitioning: boolean;
   menuOpen: boolean;
   capabilities: DeviceCapabilities;
@@ -28,6 +32,8 @@ interface ExperienceState {
   hydrateIntro: () => void;
   setAudioEnabled: (enabled: boolean) => void;
   setVolume: (volume: number) => void;
+  setMuted: (muted: boolean) => void;
+  setStation: (station: string) => void;
   setTransitioning: (value: boolean) => void;
   setMenuOpen: (open: boolean) => void;
   setCapabilities: (capabilities: DeviceCapabilities) => void;
@@ -47,6 +53,8 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   introComplete: false,
   audioEnabled: false,
   volume: 0.6,
+  muted: false,
+  station: DEFAULT_STATION,
   isTransitioning: false,
   menuOpen: false,
   capabilities: SERVER_CAPABILITIES,
@@ -73,6 +81,8 @@ export const useExperienceStore = create<ExperienceState>((set, get) => ({
   },
   setAudioEnabled: (audioEnabled) => set({ audioEnabled }),
   setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)) }),
+  setMuted: (muted) => set({ muted }),
+  setStation: (station) => set({ station }),
   setTransitioning: (isTransitioning) => set({ isTransitioning }),
   setMenuOpen: (menuOpen) => set({ menuOpen }),
   setCapabilities: (capabilities) =>

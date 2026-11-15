@@ -31,9 +31,11 @@ npm run build && npm start
 | Scroll locks | `src/lib/scroll.ts` | Keyed (`boot`, `menu`, `transition`) so owners cannot unlock each other. |
 | Boot sequence | `src/components/boot/SystemBoot.tsx` | ~4s, skippable (button or Esc), stored per session. |
 | HUD & menu | `src/components/experience/` | Top HUD, bottom HUD, full-screen act index. Layers behind a modal are `inert`. |
-| Audio | `src/lib/audio/engine.ts` | Synthesised ambience (Web Audio). No files, no autoplay; created on first user gesture. |
+| Audio | `src/lib/audio/engine.ts`, `src/data/stations.ts` | Five synthesised layers (Web Audio); a station is a mix of them. No files, no autoplay; created on first user gesture. An analyser feeds the radio's live spectrum. |
 | Night City | `src/components/city/`, `src/lib/city/`, `src/shaders/` | Procedural, seeded layout → instanced meshes with unlit GLSL (windows, traffic, neon, hologram, rain). No lights, no post-processing, no model or texture files. |
 | City camera & captions | `src/animations/cityAnimations.ts` | Two paused GSAP timelines (flight path, captions) scrubbed by the act's scroll progress. |
+| NIGHT//OS | `src/components/os/`, `src/data/` | Desktop, window manager and four apps (NETRUNNER, DATABASE, CITY MAP, NIGHT RADIO). All content is original fiction in `src/data/`. |
+| OS transitions | `src/animations/osAnimations.ts` | Time-based intro (usable immediately, also via deep link) and a scroll-scrubbed interference → glitch → collapse. |
 | Quality tiers | `src/utils/` | Capability detection and per-tier budgets for the 3D scenes. |
 | Design tokens | `src/styles/design-tokens.css` | Colour, type, motion. One accent per world via `[data-scene]`. |
 
@@ -53,14 +55,15 @@ Decisions worth knowing:
 | 1 — Audit & foundation | Done |
 | 2 — Design system & intro | Done |
 | 3 — Night City 3D | Done |
-| 4 — Cyberpunk OS | Next |
-| 5 — Neon Underground | Pending |
+| 4 — Cyberpunk OS | Done |
+| 5 — Neon Underground | Next |
 | 6 — Final act & motion polish | Pending |
 | 7 — Responsive & optimisation | Pending |
 
 ### Documented placeholders
 
-- `src/components/experience/ScenePlaceholder.tsx` stands in for acts 02–04 until Phases 4–6. It is wired to real scroll progress.
+- `src/components/experience/ScenePlaceholder.tsx` stands in for acts 03–04 until Phases 5–6. It is wired to real scroll progress.
 - `public/{models,textures,images,audio,fonts}` are empty. No asset is referenced that does not exist.
 - React Three Fiber 9.8 logs a `THREE.Clock` deprecation warning with three 0.187. It comes from the library, is harmless, and will go away with an R3F update.
-- Audio has a single city ambience bed and an on/off toggle. Per-world layers, volume and mute UI arrive with NIGHT RADIO (Phase 4) and Phase 6.
+- The ambience does not yet change automatically from world to world; that and transition sounds arrive in Phase 6. Stations can be chosen by hand in NIGHT RADIO.
+- NETRUNNER is scripted fiction: it contacts no network and reads nothing from the device.

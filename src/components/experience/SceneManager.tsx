@@ -2,6 +2,7 @@
 
 import type { ComponentType } from "react";
 import { NightCityScene } from "@/components/city/NightCityScene";
+import { CyberpunkOS } from "@/components/os/CyberpunkOS";
 import { SCENES, sceneElementId, type SceneId } from "@/data/scenes";
 import { useExperienceStore } from "@/store/experienceStore";
 import { ScenePlaceholder } from "./ScenePlaceholder";
@@ -9,6 +10,7 @@ import { ScenePlaceholder } from "./ScenePlaceholder";
 /** Real scenes, as they are built. Acts without one show the placeholder. */
 const STAGES: Partial<Record<SceneId, ComponentType<{ active: boolean }>>> = {
   city: NightCityScene,
+  os: CyberpunkOS,
 };
 
 /**
@@ -37,7 +39,7 @@ export function SceneManager() {
               {Stage ? (
                 <Stage active={active} />
               ) : (
-                // PLACEHOLDER: replaced by the real scene in Phases 4–6.
+                // PLACEHOLDER: replaced by the real scene in Phases 5–6.
                 <ScenePlaceholder scene={scene} index={index} />
               )}
             </div>
